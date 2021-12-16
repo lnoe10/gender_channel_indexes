@@ -38,15 +38,6 @@ ogdi <- read_csv("Input/OGDI2020.csv") %>%
     TRUE ~ iso3c
   ))
 
-# 4. Statistical Performance Indicators (SPI) ####
-# Latest year is 2019
-# Background https://worldbank.github.io/SPI/ and https://www.worldbank.org/en/programs/statistical-performance-indicators
-# From https://github.com/worldbank/SPI > Folder 03_output_data
-spi <- read_csv("https://raw.githubusercontent.com/worldbank/SPI/master/03_output_data/SPI_index_labelled.csv") %>%
-  filter(!is.na(country), date == 2019) %>%
-  janitor::clean_names() %>%
-  mutate(spi_index = as.numeric(spi_index)) %>%
-  select(iso3c, country, spi_index_overall = spi_index)
 
 # Supplemental A: World Bank Lending Status ####
 # Latest iteration is FY2022
