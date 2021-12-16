@@ -1,5 +1,5 @@
 library(tidyverse)
-setwd("C:/Users/lnoe/Documents/R")
+setwd("C:/Users/loren/Documents/GitHub/gender_channel_indexes")
 
 # About ####
 # Script to collect four relevant indexes for assessing gender-relevant statistical capacity
