@@ -31,7 +31,7 @@ wbl <- wb_data(indicator = "SG.LAW.INDX") %>%
 # Developed for ODIN 2020/2021 report
 # Background https://odin.opendatawatch.com/Report/annualReport2020#sec3-6
 # Data (not publicly available) from ODW Teams ODIN > ODIN Open Gender Data Index > ODIN OGDI 2020 rev.xlsx > sheet "OGDI Recalculated" > Column R "Overall score"
-ogdi <- readxl::read_excel("Data/Input Data/Indexes.xlsx", sheet = "OGDI2020") %>%
+ogdi <- read_csv("Input/OGDI2020.csv") %>%
   select(iso3c = `Country Code`, country = Country, ogdi = `Overall score`) %>%
   mutate(iso3c = case_when(
     iso3c == "ADO" ~ "AND",
