@@ -1,4 +1,5 @@
 library(tidyverse)
+library(wbstats)
 setwd("C:/Users/loren/Documents/GitHub/gender_channel_indexes")
 
 # About ####
@@ -15,22 +16,15 @@ sigi <- read_csv("Input/SIGI2019.csv") %>%
   select(iso3c = LOCATION, country = Country, sigi_value = Value) %>%
   # Overall SIGI value transformed to rank equivalence (Best value, i.e. lowest, will have rank 120, or whatever max number of countries is)
   # Then ranks transformed to percent rank, so best value will be 100, worst will be 0.
-  mutate(rank_eq = rank(-sigi_value, ties.method = "min"), pct_rank = percent_rank(rank_eq)*100)
+  mutate(rank_eq = rank(-sigi_value, ties.method = "min"), sigi_pct_rank = percent_rank(rank_eq)*100)
 
 #2. Women, Business and the Law ####
-# Latest year is 2021
+# Latest year is 2021 report year, refers to 2020 as latest calendar year
 # Background https://wbl.worldbank.org/en/wbl
-# Data from https://datacatalog.worldbank.org/dataset/women-business-and-law > Dataset (1971-2021) > sheet "WBL2021"
-wbl <- readxl::read_excel("Data/Input Data/Indexes.xlsx", sheet = "WBL2021") %>%
-  select(iso3c = wbcodev2, country = economy, wbl_index = `WBL INDEX`) %>%
-  mutate(iso3c = case_when(
-    iso3c == "KSV" ~ "XKX",
-    iso3c == "ROM" ~ "ROU",
-    iso3c == "TMP" ~ "TLS",
-    iso3c == "WBG" ~ "PSE",
-    iso3c == "ZAR" ~ "COD",
-    TRUE ~ iso3c
-  ))
+# Data from World Bank API
+wbl <- wb_data(indicator = "SG.LAW.INDX") %>%
+  select(iso3c, country, year = date, wbl_index = SG.LAW.INDX) %>%
+  filter(year == 2020, !is.na(wbl_index))
 
 # 3. ODIN Open Gender Data Index ####
 # Latest year is 2020
