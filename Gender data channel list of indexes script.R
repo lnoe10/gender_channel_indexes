@@ -61,7 +61,7 @@ gender_indexes <- wbl %>%
 
 # Export
 gender_indexes %>%
-  write_csv("Output/data_genderindexes.csv", na = "")
+  write_csv("Output/SIGI_OGDI_WBL.csv", na = "")
 
 # Determine max value (for IDA countries) for each indicator for data dictionary
 gender_indexes %>% 
