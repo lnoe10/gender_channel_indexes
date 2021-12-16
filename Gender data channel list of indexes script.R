@@ -42,11 +42,11 @@ ogdi <- read_csv("Input/OGDI2020.csv") %>%
 # Supplemental A: World Bank Lending Status ####
 # Latest iteration is FY2022
 # Used to filter number of countries to just IDA-eligible countries (74 for IDA 19)
-# Data from https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups
-# File "current classification by income in XLSX format"
-ida_status <- readxl::read_excel("Data/Input Data/FY2022 World Bank Groups.xlsx") %>%
-  filter(!is.na(Region)) %>%
-  select(iso3c = Code, lending_cat = `Lending category`)
+# See list https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups
+# Use data from wbstats R package which has country metadata in cachelist. Can update cachelist using new_cache <- wb_cache()
+ida_status <- wb_cachelist$countries %>%
+  filter(lending_type != "Aggregates") %>%
+  select(iso3c, lending_type)
 
 # Create combined file ####
 gender_indexes <- spi %>%
