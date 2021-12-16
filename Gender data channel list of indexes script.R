@@ -49,20 +49,19 @@ ida_status <- wb_cachelist$countries %>%
   select(iso3c, lending_type)
 
 # Create combined file ####
-gender_indexes <- spi %>%
-  full_join(wbl %>% select(-country)) %>%
+gender_indexes <- wbl %>%
   full_join(ogdi %>% select(-country)) %>%
   full_join(sigi %>% select(-country)) %>%
   full_join(ida_status) %>%
   # Keep just IDA-eligible countries (IDA-only countries, as well as countries with access to both IDA and IBRD)
-  filter(lending_cat %in% c("Blend", "IDA")) %>%
+  filter(lending_type %in% c("Blend", "IDA")) %>%
   arrange(iso3c) %>%
-  select(country, iso3c, ogdi, spi_index_overall, wbl_index, sigi_pct_rank) %>%
+  select(country, iso3c, ogdi, wbl_index, sigi_pct_rank) %>%
   mutate(across(ogdi:sigi_pct_rank, ~round(.x, 1)))
 
 # Export
 gender_indexes %>%
-  write_csv("Data/Output Data/data_genderindexes.csv", na = "")
+  write_csv("Output/data_genderindexes.csv", na = "")
 
 # Determine max value (for IDA countries) for each indicator for data dictionary
 gender_indexes %>% 
@@ -70,14 +69,14 @@ gender_indexes %>%
 
 # Create Data Dictionary ####
 indexes_data_dictionary <- tibble(
-  `Field Name` = c("country", "iso3c", "ogdi", "spi_index_overall", "wbl_index", "sigi_pct_rank"),
-  `Data Type` = c("VARCHAR", "VARCHAR", "DOUBLE", "DOUBLE", "DOUBLE", "DOUBLE"),
-  Description = c("Country Name", "ISO 3166-1 alpha-3 country codes", "ODIN Open Gender Data Index", "Statistical Performance Indicator", "Women, Business and the Law Index", "OECD Social Institutions and Gender Index*"),
-  `Maximum Value` = c(NA, NA, 60.6, 78.6, 91.9, 75.6),
-  `Most Recent Year` = c(NA, NA, 2020, 2019, 2021, 2019),
-  Notes = c(NA_character_, NA_character_, "Overall Score", "Overall Score", "Overall Score", "Overall Score, *Score converted to percentile rank among 120 countries worldwide with scores")
+  `Field Name` = c("country", "iso3c", "ogdi", "wbl_index", "sigi_pct_rank"),
+  `Data Type` = c("VARCHAR", "VARCHAR", "DOUBLE", "DOUBLE", "DOUBLE"),
+  Description = c("Country Name", "ISO 3166-1 alpha-3 country codes", "ODIN Open Gender Data Index", "Women, Business and the Law Index", "OECD Social Institutions and Gender Index*"),
+  `Maximum Value` = c(NA, NA, 60.6, 91.9, 75.6),
+  `Most Recent Year` = c(NA, NA, 2020, 2020, 2019),
+  Notes = c(NA_character_, NA_character_, "Overall Score", "Overall Score", "Overall Score, *Score converted to percentile rank among 120 countries worldwide with scores")
 )
 
 # Export
 indexes_data_dictionary %>%
-  write_csv("Data/Output Data/data_dictionary_genderindexes.csv", na = "")
+  write_csv("Output/data_dictionary_genderindexes.csv", na = "")

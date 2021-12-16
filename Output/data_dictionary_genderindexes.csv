@@ -1,0 +1,6 @@
+Field Name,Data Type,Description,Maximum Value,Most Recent Year,Notes
+country,VARCHAR,Country Name,,,
+iso3c,VARCHAR,ISO 3166-1 alpha-3 country codes,,,
+ogdi,DOUBLE,ODIN Open Gender Data Index,60.6,2020,Overall Score
+wbl_index,DOUBLE,"Women, Business and the Law Index",91.9,2020,Overall Score
+sigi_pct_rank,DOUBLE,OECD Social Institutions and Gender Index*,75.6,2019,"Overall Score, *Score converted to percentile rank among 120 countries worldwide with scores"
