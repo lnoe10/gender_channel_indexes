@@ -8,10 +8,14 @@ setwd("C:/Users/loren/Documents/GitHub/gender_channel_indexes")
 # Latest year is 2019
 # Background https://www.genderindex.org/
 # Data from https://stats.oecd.org/Index.aspx?DataSetCode=SIGI2019
-# Overall SIGI value transformed to rank equivalence (Best value, i.e. lowest, will have rank 120, or whatever max number of countries is)
-# Then ranks transformed to percent rank, so best value will be 100, worst will be 0.
-sigi <- readxl::read_excel("Data/Input Data/Indexes.xlsx", sheet = "SIGI2019") %>%
-  select(iso3c = LOCATION, country = Country, sigi_pct_rank = `Percent rank`)
+# Exported complete csv file
+sigi <- read_csv("Input/SIGI2019.csv") %>%
+  # Filter for just overall SIGI value
+  filter(Region == "All regions", Income == "All income groups", VAR == "SIGI_2") %>%
+  select(iso3c = LOCATION, country = Country, sigi_value = Value) %>%
+  # Overall SIGI value transformed to rank equivalence (Best value, i.e. lowest, will have rank 120, or whatever max number of countries is)
+  # Then ranks transformed to percent rank, so best value will be 100, worst will be 0.
+  mutate(rank_eq = rank(-sigi_value, ties.method = "min"), pct_rank = percent_rank(rank_eq)*100)
 
 #2. Women, Business and the Law ####
 # Latest year is 2021
